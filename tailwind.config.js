@@ -14,6 +14,19 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                display: ['Arial Black', 'sans-serif'],
+            },
+            colors: {
+                primary: {
+                    yellow: '#FFD700',
+                    pink: '#FF69B4',
+                    blue: '#00B8D4',
+                },
+            },
+            boxShadow: {
+                brutal: '8px 8px 0 0 #000',
+                'brutal-sm': '4px 4px 0 0 #000',
+                'brutal-lg': '12px 12px 0 0 #000',
             },
         },
     },

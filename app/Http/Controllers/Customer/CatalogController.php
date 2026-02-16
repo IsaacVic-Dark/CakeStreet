@@ -10,6 +10,42 @@ use Inertia\Response;
 
 class CatalogController extends Controller
 {
+    public function landing(): Response
+    {
+        // Get 6 featured products from different categories
+        $featuredProducts = Product::with(['bakery'])
+            ->where('is_available', true)
+            ->where('is_featured', true)
+            ->limit(6)
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'slug' => $product->slug,
+                    'description' => $product->description,
+                    'base_price' => $product->base_price,
+                    'category' => $product->category,
+                    'image_urls' => $product->image_urls,
+                    'is_eggless' => $product->is_eggless,
+                    'is_sugar_free' => $product->is_sugar_free,
+                    'is_featured' => $product->is_featured,
+                    'average_rating' => $product->average_rating,
+                ];
+            });
+
+        // Get all unique categories
+        $categories = Product::whereNotNull('category')
+            ->distinct()
+            ->pluck('category')
+            ->take(8);
+
+        return Inertia::render('Landing', [
+            'featuredProducts' => $featuredProducts,
+            'categories' => $categories,
+        ]);
+    }
+
     public function index(Request $request): Response
     {
         $query = Product::with(['bakery'])

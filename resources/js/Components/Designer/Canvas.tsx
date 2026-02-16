@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Square, Circle, Type, Pencil, Trash2, Download, Save } from 'lucide-react';
 import { DesignData } from '@/types';
+import * as fabric from 'fabric'; // Try direct import instead of dynamic import
 
-type FabricCanvas = import('fabric').Canvas;
+type FabricCanvas = fabric.Canvas;
 
 interface CanvasProps {
     initialData?: DesignData | null;
@@ -15,18 +16,24 @@ export default function DesignerCanvas({ initialData, designId, designName }: Ca
     const fabricCanvasRef = useRef<FabricCanvas | null>(null);
     const [canvas, setCanvas] = useState<FabricCanvas | null>(null);
     const [selectedTool, setSelectedTool] = useState<string>('select');
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (!canvasRef.current) return;
-        let mounted = true;
-
-        import('fabric').then((fabric) => {
-            if (!mounted || !canvasRef.current) return;
+        
+        console.log('Initializing canvas...'); // Add this log
+        
+        try {
+            // Direct initialization without dynamic import
             const fabricCanvas = new fabric.Canvas(canvasRef.current, {
                 width: 800,
                 height: 600,
                 backgroundColor: '#ffffff',
             });
+            
+            console.log('Fabric canvas created:', fabricCanvas); // Add this log
+            
             fabricCanvasRef.current = fabricCanvas;
 
             const border = new fabric.Rect({
@@ -41,12 +48,17 @@ export default function DesignerCanvas({ initialData, designId, designName }: Ca
                 evented: false,
             });
             fabricCanvas.add(border);
-
+            
+            fabricCanvas.requestRenderAll();
             setCanvas(fabricCanvas);
-        }).catch(() => setCanvas(null));
+            setIsLoading(false);
+        } catch (err) {
+            console.error('Error initializing fabric:', err);
+            setError(err instanceof Error ? err.message : 'Failed to initialize canvas');
+            setIsLoading(false);
+        }
 
         return () => {
-            mounted = false;
             fabricCanvasRef.current?.dispose();
             fabricCanvasRef.current = null;
             setCanvas(null);
@@ -55,69 +67,62 @@ export default function DesignerCanvas({ initialData, designId, designName }: Ca
 
     const addRectangle = () => {
         if (!canvas) return;
-        import('fabric').then((fabric) => {
-            const rect = new fabric.Rect({
-                left: 100,
-                top: 100,
-                width: 200,
-                height: 150,
-                fill: '#FF69B4',
-                stroke: '#000000',
-                strokeWidth: 4,
-            });
-            canvas.add(rect);
-            canvas.setActiveObject(rect);
-            canvas.requestRenderAll();
+        const rect = new fabric.Rect({
+            left: 100,
+            top: 100,
+            width: 200,
+            height: 150,
+            fill: '#FF69B4',
+            stroke: '#000000',
+            strokeWidth: 4,
         });
+        canvas.add(rect);
+        canvas.setActiveObject(rect);
+        canvas.requestRenderAll();
     };
 
     const addCircle = () => {
         if (!canvas) return;
-        import('fabric').then((fabric) => {
-            const circle = new fabric.Circle({
-                left: 100,
-                top: 100,
-                radius: 75,
-                fill: '#FFB6C1',
-                stroke: '#000000',
-                strokeWidth: 4,
-            });
-            canvas.add(circle);
-            canvas.setActiveObject(circle);
-            canvas.requestRenderAll();
+        const circle = new fabric.Circle({
+            left: 100,
+            top: 100,
+            radius: 75,
+            fill: '#FFB6C1',
+            stroke: '#000000',
+            strokeWidth: 4,
         });
+        canvas.add(circle);
+        canvas.setActiveObject(circle);
+        canvas.requestRenderAll();
     };
 
     const addText = () => {
         if (!canvas) return;
-        import('fabric').then((fabric) => {
-            const text = new fabric.IText('Happy Birthday!', {
-                left: 100,
-                top: 100,
-                fontSize: 40,
-                fontFamily: 'Arial',
-                fill: '#000000',
-            });
-            canvas.add(text);
-            canvas.setActiveObject(text);
-            canvas.requestRenderAll();
+        const text = new fabric.IText('Happy Birthday!', {
+            left: 100,
+            top: 100,
+            fontSize: 40,
+            fontFamily: 'Arial',
+            fill: '#000000',
         });
+        canvas.add(text);
+        canvas.setActiveObject(text);
+        canvas.requestRenderAll();
     };
 
     const enableDrawing = () => {
         if (!canvas) return;
-        (canvas as FabricCanvas & { isDrawingMode: boolean; freeDrawingBrush?: { color: string; width: number } }).isDrawingMode = true;
-        const brush = (canvas as FabricCanvas & { freeDrawingBrush?: { color: string; width: number } }).freeDrawingBrush;
-        if (brush) {
-            brush.color = '#000000';
-            brush.width = 3;
+        canvas.isDrawingMode = true;
+        if (canvas.freeDrawingBrush) {
+            canvas.freeDrawingBrush.color = '#000000';
+            canvas.freeDrawingBrush.width = 3;
         }
         setSelectedTool('draw');
     };
 
     const disableDrawing = () => {
         if (!canvas) return;
-        (canvas as FabricCanvas & { isDrawingMode: boolean }).isDrawingMode = false;
+        canvas.isDrawingMode = false;
         setSelectedTool('select');
     };
 
@@ -136,12 +141,11 @@ export default function DesignerCanvas({ initialData, designId, designName }: Ca
             canvas: {
                 width: 800,
                 height: 600,
-                backgroundColor: (canvas.backgroundColor as string) ?? '#ffffff',
+                backgroundColor: canvas.backgroundColor as string ?? '#ffffff',
             },
             layers: canvas.getObjects().map((obj, i) => ({ id: `layer-${i}`, data: obj.toObject() })),
         };
-        const preview = canvas.toDataURL({ format: 'png', quality: 0.8 });
-
+        const preview = canvas.toDataURL({ format: 'png', quality: 0.8, multiplier: 1 });
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = '/designer/save';
@@ -176,17 +180,47 @@ export default function DesignerCanvas({ initialData, designId, designName }: Ca
 
     const handleExport = () => {
         if (!canvas) return;
-        const dataURL = canvas.toDataURL({ format: 'png', quality: 1.0 });
+        const dataURL = canvas.toDataURL({ format: 'png', quality: 1.0, multiplier: 1 });
         const link = document.createElement('a');
         link.download = 'cake-design.png';
         link.href = dataURL;
         link.click();
     };
 
-    if (canvas === null) {
+    if (error) {
+        return (
+            <div className="border-4 border-black p-8 text-center bg-red-50">
+                <p className="font-bold text-red-600 mb-4">Error loading canvas</p>
+                <p className="text-red-500">{error}</p>
+                <button 
+                    onClick={() => window.location.reload()} 
+                    className="mt-4 px-4 py-2 bg-black text-white font-bold hover:bg-gray-800"
+                >
+                    Reload Page
+                </button>
+            </div>
+        );
+    }
+
+    if (isLoading) {
         return (
             <div className="border-4 border-black p-8 text-center">
                 <p className="font-bold mb-4">Loading canvas...</p>
+                <div className="animate-pulse">Please wait</div>
+            </div>
+        );
+    }
+
+    if (!canvas) {
+        return (
+            <div className="border-4 border-black p-8 text-center">
+                <p className="font-bold mb-4">Canvas not available</p>
+                <button 
+                    onClick={() => window.location.reload()} 
+                    className="px-4 py-2 bg-black text-white font-bold hover:bg-gray-800"
+                >
+                    Reload Page
+                </button>
             </div>
         );
     }

@@ -21,9 +21,15 @@ use Inertia\Inertia;
 */
 
 // Public routes
-Route::get('/', [CatalogController::class, 'index'])->name('home');
+Route::get('/', [CatalogController::class, 'landing'])->name('home');
 Route::get('/products', [CatalogController::class, 'index'])->name('products.index');
 Route::get('/products/{slug}', [CatalogController::class, 'show'])->name('products.show');
+
+// Static pages
+Route::inertia('/outlets', 'Outlets')->name('outlets');
+Route::inertia('/contact', 'Contact')->name('contact');
+Route::inertia('/gallery', 'Gallery')->name('gallery'); // TODO: Create Gallery page
+
 
 // Google OAuth
 Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google');

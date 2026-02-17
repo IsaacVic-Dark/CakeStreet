@@ -1,7 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import { Square, Circle, Type, Pencil, Trash2, Download, Save } from 'lucide-react';
-import { DesignData } from '@/types';
-import * as fabric from 'fabric'; // Try direct import instead of dynamic import
+import { useEffect, useRef, useState } from "react";
+import {
+    Square,
+    Circle,
+    Type,
+    Pencil,
+    Trash2,
+    Download,
+    Save,
+} from "lucide-react";
+import { DesignData } from "@/types";
+import * as fabric from "fabric";
 
 type FabricCanvas = fabric.Canvas;
 
@@ -11,50 +19,43 @@ interface CanvasProps {
     designName?: string | null;
 }
 
-export default function DesignerCanvas({ initialData, designId, designName }: CanvasProps) {
+export default function DesignerCanvas({
+    initialData,
+    designId,
+    designName,
+}: CanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const fabricCanvasRef = useRef<FabricCanvas | null>(null);
     const [canvas, setCanvas] = useState<FabricCanvas | null>(null);
-    const [selectedTool, setSelectedTool] = useState<string>('select');
+    const [selectedTool, setSelectedTool] = useState<string>("select");
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!canvasRef.current) return;
-        
-        console.log('Initializing canvas...'); // Add this log
-        
+        if (!canvasRef.current) {
+            setError("Canvas element not found");
+            setIsLoading(false);
+            return;
+        }
+
         try {
-            // Direct initialization without dynamic import
             const fabricCanvas = new fabric.Canvas(canvasRef.current, {
                 width: 800,
                 height: 600,
-                backgroundColor: '#ffffff',
+                backgroundColor: "#ffffff",
             });
-            
-            console.log('Fabric canvas created:', fabricCanvas); // Add this log
-            
+
             fabricCanvasRef.current = fabricCanvas;
 
-            const border = new fabric.Rect({
-                left: 0,
-                top: 0,
-                width: 800,
-                height: 600,
-                fill: 'transparent',
-                stroke: '#000000',
-                strokeWidth: 4,
-                selectable: false,
-                evented: false,
-            });
-            fabricCanvas.add(border);
-            
             fabricCanvas.requestRenderAll();
             setCanvas(fabricCanvas);
             setIsLoading(false);
         } catch (err) {
-            console.error('Error initializing fabric:', err);
-            setError(err instanceof Error ? err.message : 'Failed to initialize canvas');
+            setError(
+                err instanceof Error
+                    ? err.message
+                    : "Failed to initialize canvas",
+            );
             setIsLoading(false);
         }
 
@@ -72,8 +73,8 @@ export default function DesignerCanvas({ initialData, designId, designName }: Ca
             top: 100,
             width: 200,
             height: 150,
-            fill: '#FF69B4',
-            stroke: '#000000',
+            fill: "#422226",
+            stroke: "#000000",
             strokeWidth: 4,
         });
         canvas.add(rect);
@@ -87,8 +88,8 @@ export default function DesignerCanvas({ initialData, designId, designName }: Ca
             left: 100,
             top: 100,
             radius: 75,
-            fill: '#FFB6C1',
-            stroke: '#000000',
+            fill: "#FFB6C1",
+            stroke: "#000000",
             strokeWidth: 4,
         });
         canvas.add(circle);
@@ -98,12 +99,12 @@ export default function DesignerCanvas({ initialData, designId, designName }: Ca
 
     const addText = () => {
         if (!canvas) return;
-        const text = new fabric.IText('Happy Birthday!', {
+        const text = new fabric.IText("Happy Birthday!", {
             left: 100,
             top: 100,
             fontSize: 40,
-            fontFamily: 'Arial',
-            fill: '#000000',
+            fontFamily: "Arial",
+            fill: "#000000",
         });
         canvas.add(text);
         canvas.setActiveObject(text);
@@ -114,16 +115,16 @@ export default function DesignerCanvas({ initialData, designId, designName }: Ca
         if (!canvas) return;
         canvas.isDrawingMode = true;
         if (canvas.freeDrawingBrush) {
-            canvas.freeDrawingBrush.color = '#000000';
+            canvas.freeDrawingBrush.color = "#000000";
             canvas.freeDrawingBrush.width = 3;
         }
-        setSelectedTool('draw');
+        setSelectedTool("draw");
     };
 
     const disableDrawing = () => {
         if (!canvas) return;
         canvas.isDrawingMode = false;
-        setSelectedTool('select');
+        setSelectedTool("select");
     };
 
     const deleteSelected = () => {
@@ -141,36 +142,45 @@ export default function DesignerCanvas({ initialData, designId, designName }: Ca
             canvas: {
                 width: 800,
                 height: 600,
-                backgroundColor: canvas.backgroundColor as string ?? '#ffffff',
+                backgroundColor:
+                    (canvas.backgroundColor as string) ?? "#ffffff",
             },
-            layers: canvas.getObjects().map((obj, i) => ({ id: `layer-${i}`, data: obj.toObject() })),
+            layers: canvas
+                .getObjects()
+                .map((obj, i) => ({ id: `layer-${i}`, data: obj.toObject() })),
         };
-        const preview = canvas.toDataURL({ format: 'png', quality: 0.8, multiplier: 1 });
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/designer/save';
-        const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const preview = canvas.toDataURL({
+            format: "png",
+            quality: 0.8,
+            multiplier: 1,
+        });
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/designer/save";
+        const csrf = document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute("content");
         if (csrf) {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = '_token';
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "_token";
             input.value = csrf;
             form.appendChild(input);
         }
-        const dataInput = document.createElement('input');
-        dataInput.type = 'hidden';
-        dataInput.name = 'design_data';
+        const dataInput = document.createElement("input");
+        dataInput.type = "hidden";
+        dataInput.name = "design_data";
         dataInput.value = JSON.stringify(designData);
         form.appendChild(dataInput);
-        const previewInput = document.createElement('input');
-        previewInput.type = 'hidden';
-        previewInput.name = 'preview_image_url';
+        const previewInput = document.createElement("input");
+        previewInput.type = "hidden";
+        previewInput.name = "preview_image_url";
         previewInput.value = preview;
         form.appendChild(previewInput);
         if (designName) {
-            const nameInput = document.createElement('input');
-            nameInput.type = 'hidden';
-            nameInput.name = 'name';
+            const nameInput = document.createElement("input");
+            nameInput.type = "hidden";
+            nameInput.name = "name";
             nameInput.value = designName;
             form.appendChild(nameInput);
         }
@@ -180,9 +190,13 @@ export default function DesignerCanvas({ initialData, designId, designName }: Ca
 
     const handleExport = () => {
         if (!canvas) return;
-        const dataURL = canvas.toDataURL({ format: 'png', quality: 1.0, multiplier: 1 });
-        const link = document.createElement('a');
-        link.download = 'cake-design.png';
+        const dataURL = canvas.toDataURL({
+            format: "png",
+            quality: 1.0,
+            multiplier: 1,
+        });
+        const link = document.createElement("a");
+        link.download = "cake-design.png";
         link.href = dataURL;
         link.click();
     };
@@ -190,34 +204,13 @@ export default function DesignerCanvas({ initialData, designId, designName }: Ca
     if (error) {
         return (
             <div className="border-4 border-black p-8 text-center bg-red-50">
-                <p className="font-bold text-red-600 mb-4">Error loading canvas</p>
+                <p className="font-bold text-red-600 mb-4">
+                    Error loading canvas
+                </p>
                 <p className="text-red-500">{error}</p>
-                <button 
-                    onClick={() => window.location.reload()} 
+                <button
+                    onClick={() => window.location.reload()}
                     className="mt-4 px-4 py-2 bg-black text-white font-bold hover:bg-gray-800"
-                >
-                    Reload Page
-                </button>
-            </div>
-        );
-    }
-
-    if (isLoading) {
-        return (
-            <div className="border-4 border-black p-8 text-center">
-                <p className="font-bold mb-4">Loading canvas...</p>
-                <div className="animate-pulse">Please wait</div>
-            </div>
-        );
-    }
-
-    if (!canvas) {
-        return (
-            <div className="border-4 border-black p-8 text-center">
-                <p className="font-bold mb-4">Canvas not available</p>
-                <button 
-                    onClick={() => window.location.reload()} 
-                    className="px-4 py-2 bg-black text-white font-bold hover:bg-gray-800"
                 >
                     Reload Page
                 </button>
@@ -231,36 +224,66 @@ export default function DesignerCanvas({ initialData, designId, designName }: Ca
                 <button
                     type="button"
                     onClick={disableDrawing}
-                    className={`w-full p-3 border-4 border-black ${selectedTool === 'select' ? 'bg-amber-400' : 'bg-white'} hover:bg-amber-400`}
+                    className={`w-full p-3 border-4 border-black ${selectedTool === "select" ? "bg-amber-400" : "bg-white"} hover:bg-amber-400`}
                     title="Select"
                 >
                     <Type size={24} className="mx-auto" />
                 </button>
-                <button type="button" onClick={addRectangle} className="w-full p-3 border-4 border-black bg-white hover:bg-amber-400" title="Rectangle">
+                <button
+                    type="button"
+                    onClick={addRectangle}
+                    className="w-full p-3 border-4 border-black bg-white hover:bg-amber-400"
+                    title="Rectangle"
+                >
                     <Square size={24} className="mx-auto" />
                 </button>
-                <button type="button" onClick={addCircle} className="w-full p-3 border-4 border-black bg-white hover:bg-amber-400" title="Circle">
+                <button
+                    type="button"
+                    onClick={addCircle}
+                    className="w-full p-3 border-4 border-black bg-white hover:bg-amber-400"
+                    title="Circle"
+                >
                     <Circle size={24} className="mx-auto" />
                 </button>
-                <button type="button" onClick={addText} className="w-full p-3 border-4 border-black bg-white hover:bg-amber-400" title="Text">
+                <button
+                    type="button"
+                    onClick={addText}
+                    className="w-full p-3 border-4 border-black bg-white hover:bg-amber-400"
+                    title="Text"
+                >
                     <Type size={24} className="mx-auto" />
                 </button>
                 <button
                     type="button"
                     onClick={enableDrawing}
-                    className={`w-full p-3 border-4 border-black ${selectedTool === 'draw' ? 'bg-amber-400' : 'bg-white'} hover:bg-amber-400`}
+                    className={`w-full p-3 border-4 border-black ${selectedTool === "draw" ? "bg-amber-400" : "bg-white"} hover:bg-amber-400`}
                     title="Draw"
                 >
                     <Pencil size={24} className="mx-auto" />
                 </button>
                 <div className="border-t-4 border-black my-2" />
-                <button type="button" onClick={deleteSelected} className="w-full p-3 border-4 border-black bg-white hover:bg-red-400" title="Delete">
+                <button
+                    type="button"
+                    onClick={deleteSelected}
+                    className="w-full p-3 border-4 border-black bg-white hover:bg-red-400"
+                    title="Delete"
+                >
                     <Trash2 size={24} className="mx-auto" />
                 </button>
-                <button type="button" onClick={handleSave} className="w-full p-3 border-4 border-black bg-green-400 hover:bg-green-500" title="Save">
+                <button
+                    type="button"
+                    onClick={handleSave}
+                    className="w-full p-3 border-4 border-black bg-green-400 hover:bg-green-500"
+                    title="Save"
+                >
                     <Save size={24} className="mx-auto" />
                 </button>
-                <button type="button" onClick={handleExport} className="w-full p-3 border-4 border-black bg-blue-400 hover:bg-blue-500" title="Export">
+                <button
+                    type="button"
+                    onClick={handleExport}
+                    className="w-full p-3 border-4 border-black bg-blue-400 hover:bg-blue-500"
+                    title="Export"
+                >
                     <Download size={24} className="mx-auto" />
                 </button>
             </div>

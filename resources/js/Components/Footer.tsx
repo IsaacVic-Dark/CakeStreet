@@ -105,7 +105,7 @@ export default function Footer() {
                             <input
                                 type="email"
                                 placeholder="Enter your email here..."
-                                className="px-4 py-2 rounded-l-md w-full md:w-64 text-typography-100 focus:outline-none"
+                                className="px-4 py-2 rounded-l-md w-full md:w-64 focus:outline-none"
                             />
                             <button className="px-6 py-2 bg-accent-orange hover:bg-opacity-90 rounded-r-md font-medium transition-colors">
                                 Submit

@@ -114,7 +114,7 @@ export default function Show({ product, relatedProducts }: Props) {
             <Head title={product.name} />
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Breadcrumb */}
-                <div className="flex items-center gap-2 text-sm text-typography-300 mb-6">
+                <div className="flex items-center gap-2 text-sm mb-6">
                     <Link href="/" className="hover:text-primary">Home</Link>
                     <span>›</span>
                     <Link href="/categories" className="hover:text-primary">Categories</Link>
@@ -123,7 +123,7 @@ export default function Show({ product, relatedProducts }: Props) {
                         {product.category || 'Snacks & Savouries'}
                     </Link>
                     <span>›</span>
-                    <span className="text-typography-100">{product.name}</span>
+                    <span className="">{product.name}</span>
                 </div>
 
                 {/* Product Details Section */}
@@ -138,37 +138,37 @@ export default function Show({ product, relatedProducts }: Props) {
                             />
                         ) : (
                             <div className="w-full h-96 flex items-center justify-center bg-neutral-200">
-                                <span className="text-typography-300 text-lg">No Image Available</span>
+                                <span className="text-lg">No Image Available</span>
                             </div>
                         )}
                     </div>
 
                     {/* Product Info */}
                     <div>
-                        <h1 className="text-4xl font-bold text-typography-100 mb-2">{product.name}</h1>
+                        <h1 className="text-4xl font-bold mb-2">{product.name}</h1>
                         
                         <div className="mb-4">
-                            <p className="text-sm text-typography-300">
+                            <p className="text-sm ">
                                 <span className="font-semibold">Department:</span> {product.category || 'Hot'}
                             </p>
-                            <p className="text-sm text-typography-300">
+                            <p className="text-sm ">
                                 <span className="font-semibold">Unit:</span> Pcs
                             </p>
                             <div className="flex items-center gap-2">
-                                <span className="text-sm font-semibold text-typography-300">Rate:</span>
+                                <span className="text-sm font-semibold ">Rate:</span>
                                 <span className="text-sm text-green-600 font-semibold">90%</span>
                                 <span className="text-sm text-red-500 line-through">120%</span>
                             </div>
                         </div>
 
-                        <p className="text-typography-300 mb-6 leading-relaxed">
+                        <p className="mb-6 leading-relaxed">
                             <span className="font-semibold">Description:</span> {product.description || 'Exclusive Chicken fry burger made with hand selected pure Almonds,Pista & Cashews in Fancy Box. No Milk or Milk products used.'}
                         </p>
 
                         {/* Weight/Size Selection */}
                         {product.available_sizes && product.available_sizes.length > 0 && (
                             <div className="mb-6">
-                                <p className="font-semibold text-typography-100 mb-3">Weight</p>
+                                <p className="font-semibold mb-3">Weight</p>
                                 <select className="w-full max-w-xs border border-neutral-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
                                     {product.available_sizes.map((size) => (
                                         <option key={`${size.kg}-${size.price}`} value={size.kg}>
@@ -181,7 +181,7 @@ export default function Show({ product, relatedProducts }: Props) {
 
                         {/* Quantity */}
                         <div className="mb-6">
-                            <p className="font-semibold text-typography-100 mb-3">Quantity:</p>
+                            <p className="font-semibold mb-3">Quantity:</p>
                             <div className="flex items-center gap-3">
                                 <button
                                     type="button"
@@ -214,7 +214,7 @@ export default function Show({ product, relatedProducts }: Props) {
                                 onClick={addToCart}
                                 className="w-full max-w-xs px-8 py-3 bg-primary text-white font-semibold rounded hover:bg-primary-75 transition-colors"
                             >
-                                Buy Now
+                                Add Cart
                             </button>
                         ) : (
                             <Link
@@ -230,7 +230,7 @@ export default function Show({ product, relatedProducts }: Props) {
                 {/* Frequently Bought Together Section */}
                 <div className="mb-16">
                     <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold text-typography-100">Frequently Bought Together</h2>
+                        <h2 className="text-2xl font-bold">Frequently Bought Together</h2>
                         <div className="flex gap-2">
                             <button className="w-10 h-10 flex items-center justify-center border border-neutral-300 rounded hover:bg-neutral-100">
                                 ←
@@ -246,21 +246,21 @@ export default function Show({ product, relatedProducts }: Props) {
                         {frequentlyBoughtTogether.map((item) => (
                             <div key={item.id} className="bg-white rounded-lg shadow-card overflow-hidden hover:shadow-card-hover transition-shadow">
                                 <div className="bg-neutral-100 h-48 flex items-center justify-center">
-                                    <span className="text-typography-300">Product Image</span>
+                                    <span className="">Product Image</span>
                                 </div>
                                 <div className="p-4">
-                                    <p className="text-xs text-typography-300 mb-1">{item.category}</p>
-                                    <h3 className="font-semibold text-typography-100 mb-2">{item.name}</h3>
+                                    <p className="text-xs mb-1">{item.category}</p>
+                                    <h3 className="font-semibold mb-2">{item.name}</h3>
                                     <div className="flex items-center gap-2 mb-3">
-                                        <span className="text-lg font-bold text-typography-100">৳{item.price}kg</span>
+                                        <span className="text-lg font-bold">৳{item.price}kg</span>
                                         {item.originalPrice && (
                                             <>
                                                 <span className="text-sm text-green-600 bg-green-50 px-2 py-1 rounded">Save</span>
-                                                <span className="text-sm text-typography-300 line-through">৳{item.originalPrice}kg</span>
+                                                <span className="text-sm line-through">৳{item.originalPrice}kg</span>
                                             </>
                                         )}
                                     </div>
-                                    <p className="text-xs text-typography-300 mb-4 line-clamp-2">{item.description}</p>
+                                    <p className="text-xs mb-4 line-clamp-2">{item.description}</p>
                                     <button className="w-full py-2 bg-primary text-white text-sm font-semibold rounded hover:bg-primary-75 transition-colors">
                                         Add to Cart
                                     </button>
@@ -279,7 +279,7 @@ export default function Show({ product, relatedProducts }: Props) {
                                 className={`pb-4 font-semibold transition-colors ${
                                     activeTab === 'description'
                                         ? 'text-typography-100 border-b-2 border-typography-100'
-                                        : 'text-typography-300 hover:text-typography-100'
+                                        : 'hover:text-typography-100'
                                 }`}
                             >
                                 Description
@@ -289,12 +289,12 @@ export default function Show({ product, relatedProducts }: Props) {
                                 className={`pb-4 font-semibold transition-colors ${
                                     activeTab === 'details'
                                         ? 'text-typography-100 border-b-2 border-typography-100'
-                                        : 'text-typography-300 hover:text-typography-100'
+                                        : 'hover:text-typography-100'
                                 }`}
                             >
                                 Product details
                             </button>
-                            {/* <div className="pb-4 font-semibold text-typography-300">
+                            {/* <div className="pb-4 font-semibold ">
                                 Customers Rating
                             </div> */}
                         </div>
@@ -305,14 +305,14 @@ export default function Show({ product, relatedProducts }: Props) {
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                             <div className="lg:col-span-2">
                                 {/* HARD CODED - Description Content */}
-                                <h3 className="text-xl font-bold text-typography-100 mb-4">Description</h3>
-                                <p className="text-typography-300 mb-6 leading-relaxed">
+                                <h3 className="text-xl font-bold mb-4">Description</h3>
+                                <p className="mb-6 leading-relaxed">
                                     {productDescription.main}
                                 </p>
 
                                 <div className="mb-6">
-                                    <h4 className="font-semibold text-typography-100 mb-3">Our Product Attributes:</h4>
-                                    <ol className="list-decimal list-inside space-y-2 text-typography-300">
+                                    <h4 className="font-semibold mb-3">Our Product Attributes:</h4>
+                                    <ol className="list-decimal list-inside space-y-2 ">
                                         <li>
                                             <span className="font-semibold">Basic Ingredients</span>
                                             <ul className="ml-6 mt-2 space-y-1 list-disc list-inside">
@@ -343,7 +343,7 @@ export default function Show({ product, relatedProducts }: Props) {
 
                             {/* HARD CODED - Customer Ratings Sidebar */}
                             <div className="bg-neutral-50 p-6 rounded-lg h-fit">
-                                <h3 className="text-xl font-bold text-typography-100 mb-4">Customers Rating</h3>
+                                <h3 className="text-xl font-bold mb-4">Customers Rating</h3>
                                 
                                 <div className="flex items-center gap-2 mb-6">
                                     <div className="flex">
@@ -363,10 +363,10 @@ export default function Show({ product, relatedProducts }: Props) {
 
                                 <div className="mb-4">
                                     <div className="flex items-center justify-between mb-2">
-                                        <span className="text-3xl font-bold text-typography-100">
+                                        <span className="text-3xl font-bold">
                                             {customerRatings.averageRating.toFixed(1)}
                                         </span>
-                                        <span className="text-sm text-typography-300">out of 5</span>
+                                        <span className="text-sm ">out of 5</span>
                                     </div>
                                     <div className="flex gap-1 mb-2">
                                         <button className="text-sm px-3 py-1 border border-neutral-300 rounded hover:bg-neutral-100">
@@ -378,14 +378,14 @@ export default function Show({ product, relatedProducts }: Props) {
                                 <div className="space-y-2">
                                     {customerRatings.breakdown.map((item) => (
                                         <div key={item.stars} className="flex items-center gap-3">
-                                            <span className="text-sm text-typography-300 w-12">{item.stars} Star</span>
+                                            <span className="text-sm w-12">{item.stars} Star</span>
                                             <div className="flex-1 bg-neutral-200 h-2 rounded-full overflow-hidden">
                                                 <div
                                                     className="bg-accent-orange h-full"
                                                     style={{ width: `${item.percentage}%` }}
                                                 />
                                             </div>
-                                            <span className="text-sm text-typography-300 w-12 text-right">{item.percentage}%</span>
+                                            <span className="text-sm w-12 text-right">{item.percentage}%</span>
                                         </div>
                                     ))}
                                 </div>
@@ -396,14 +396,14 @@ export default function Show({ product, relatedProducts }: Props) {
                     {activeTab === 'details' && (
                         <div>
                             {/* HARD CODED - Product Details */}
-                            <h3 className="text-xl font-bold text-typography-100 mb-4">Product Details</h3>
-                            <div className="space-y-3 text-typography-300">
-                                <p><span className="font-semibold text-typography-100">Department:</span> {product.category || 'Hot'}</p>
-                                <p><span className="font-semibold text-typography-100">Unit:</span> KG</p>
-                                <p><span className="font-semibold text-typography-100">Rate:</span> <span className="text-green-600">90%</span></p>
+                            <h3 className="text-xl font-bold mb-4">Product Details</h3>
+                            <div className="space-y-3 ">
+                                <p><span className="font-semibold">Department:</span> {product.category || 'Hot'}</p>
+                                <p><span className="font-semibold">Unit:</span> KG</p>
+                                <p><span className="font-semibold">Rate:</span> <span className="text-green-600">90%</span></p>
                                 {product.ingredients && product.ingredients.length > 0 && (
                                     <div>
-                                        <p className="font-semibold text-typography-100 mb-2">Ingredients:</p>
+                                        <p className="font-semibold mb-2">Ingredients:</p>
                                         <ul className="list-disc list-inside ml-4">
                                             {product.ingredients.map((ingredient, idx) => (
                                                 <li key={idx}>{ingredient}</li>
@@ -413,7 +413,7 @@ export default function Show({ product, relatedProducts }: Props) {
                                 )}
                                 {product.allergens && product.allergens.length > 0 && (
                                     <div>
-                                        <p className="font-semibold text-typography-100 mb-2">Allergens:</p>
+                                        <p className="font-semibold mb-2">Allergens:</p>
                                         <ul className="list-disc list-inside ml-4">
                                             {product.allergens.map((allergen, idx) => (
                                                 <li key={idx}>{allergen}</li>
@@ -422,7 +422,7 @@ export default function Show({ product, relatedProducts }: Props) {
                                     </div>
                                 )}
                                 <div>
-                                    <p className="font-semibold text-typography-100 mb-2">Features:</p>
+                                    <p className="font-semibold mb-2">Features:</p>
                                     <ul className="list-disc list-inside ml-4 space-y-1">
                                         {productDescription.features.map((feature, idx) => (
                                             <li key={idx}>{feature}</li>
@@ -438,7 +438,7 @@ export default function Show({ product, relatedProducts }: Props) {
                 {relatedProducts.length > 0 && (
                     <div>
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-2xl font-bold text-typography-100">Our Related Item</h2>
+                            <h2 className="text-2xl font-bold">Our Related Item</h2>
                             <div className="flex gap-2">
                                 <button className="w-10 h-10 flex items-center justify-center border border-neutral-300 rounded hover:bg-neutral-100">
                                     ←

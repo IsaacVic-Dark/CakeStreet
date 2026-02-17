@@ -58,7 +58,7 @@ export default function Index({ products, filters, categories }: Props) {
         <Layout>
             <Head title="Cakes" />
             <div className="max-w-7xl mx-auto px-4 py-8">
-                <h1 className="text-3xl font-bold text-typography-100 mb-8">
+                <h1 className="text-3xl font-bold mb-8">
                     Explore Our Shop
                 </h1>
 
@@ -68,8 +68,8 @@ export default function Index({ products, filters, categories }: Props) {
                         {/* Categories Filter */}
                         <div className="bg-white rounded-lg shadow-card p-6 mb-6">
                             <button className="flex items-center justify-between w-full mb-4">
-                                <h3 className="font-semibold text-typography-100">Categories</h3>
-                                <span className="text-typography-300">▼</span>
+                                <h3 className="font-semibold">Categories</h3>
+                                <span className="">▼</span>
                             </button>
                             <div className="space-y-3">
                                 {categories.map((category) => (
@@ -80,7 +80,7 @@ export default function Index({ products, filters, categories }: Props) {
                                             onChange={() => toggleCategory(category)}
                                             className="w-4 h-4 rounded border-neutral-300 text-primary focus:ring-primary cursor-pointer"
                                         />
-                                        <span className="text-sm text-typography-300 group-hover:text-typography-100">
+                                        <span className="text-sm group-hover:text-typography-100">
                                             {category}
                                         </span>
                                     </label>
@@ -91,8 +91,8 @@ export default function Index({ products, filters, categories }: Props) {
                         {/* Price Ranges Filter */}
                         <div className="bg-white rounded-lg shadow-card p-6">
                             <button className="flex items-center justify-between w-full mb-4">
-                                <h3 className="font-semibold text-typography-100">Price Ranges</h3>
-                                <span className="text-typography-300">▼</span>
+                                <h3 className="font-semibold">Price Ranges</h3>
+                                <span className="">▼</span>
                             </button>
                             <div className="space-y-3">
                                 {priceRanges.map((range) => (
@@ -103,7 +103,7 @@ export default function Index({ products, filters, categories }: Props) {
                                             onChange={() => togglePriceRange(range.id)}
                                             className="w-4 h-4 rounded border-neutral-300 text-primary focus:ring-primary cursor-pointer"
                                         />
-                                        <span className="text-sm text-typography-300 group-hover:text-typography-100">
+                                        <span className="text-sm group-hover:text-typography-100">
                                             {range.label}
                                         </span>
                                     </label>
@@ -145,7 +145,7 @@ export default function Index({ products, filters, categories }: Props) {
                                         defaultChecked={filters.is_eggless}
                                         className="w-4 h-4 rounded border-neutral-300 text-primary focus:ring-primary"
                                     />
-                                    <span className="text-typography-300">Eggless</span>
+                                    <span className="">Eggless</span>
                                 </label>
 
                                 <label className="flex items-center gap-2 text-sm">
@@ -156,7 +156,7 @@ export default function Index({ products, filters, categories }: Props) {
                                         defaultChecked={filters.is_sugar_free}
                                         className="w-4 h-4 rounded border-neutral-300 text-primary focus:ring-primary"
                                     />
-                                    <span className="text-typography-300">Sugar free</span>
+                                    <span className="">Sugar free</span>
                                 </label>
 
                                 <button
@@ -177,7 +177,7 @@ export default function Index({ products, filters, categories }: Props) {
 
                         {products.data.length === 0 && (
                             <div className="text-center py-16">
-                                <p className="text-xl font-semibold text-typography-300">No cakes found.</p>
+                                <p className="text-xl font-semibold ">No cakes found.</p>
                             </div>
                         )}
 
@@ -192,7 +192,7 @@ export default function Index({ products, filters, categories }: Props) {
                                                 className={`px-4 py-2 rounded border ${
                                                     link.active 
                                                         ? 'bg-primary text-white border-primary' 
-                                                        : 'bg-white border-neutral-300 text-typography-300 hover:bg-neutral-50'
+                                                        : 'bg-white border-neutral-300 hover:bg-neutral-50'
                                                 }`}
                                             >
                                                 {link.label.replace('&laquo;', '').replace('&raquo;', '').trim() || (i === 0 ? 'Prev' : 'Next')}

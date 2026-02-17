@@ -111,32 +111,32 @@ export default function Navigation({ user }: NavigationProps) {
                                             />
                                             <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-soft-lg z-20 py-2">
                                                 <div className="px-4 py-3 border-b border-neutral-200">
-                                                    <p className="text-sm font-semibold text-typography-100">{user.name}</p>
-                                                    <p className="text-xs text-typography-300">{user.email}</p>
+                                                    <p className="text-sm font-semibold">{user.name}</p>
+                                                    <p className="text-xs ">{user.email}</p>
                                                 </div>
                                                 <Link
                                                     href="/my-orders"
-                                                    className="block px-4 py-2 text-sm text-typography-100 hover:bg-neutral-100"
+                                                    className="block px-4 py-2 text-sm hover:bg-neutral-100"
                                                 >
                                                     My Orders
                                                 </Link>
                                                 <Link
                                                     href="/dashboard"
-                                                    className="block px-4 py-2 text-sm text-typography-100 hover:bg-neutral-100"
+                                                    className="block px-4 py-2 text-sm hover:bg-neutral-100"
                                                 >
                                                     Dashboard
                                                 </Link>
                                                 {(user.role === 'owner' || user.role === 'admin') && (
                                                     <Link
                                                         href="/owner/dashboard"
-                                                        className="block px-4 py-2 text-sm text-typography-100 hover:bg-neutral-100"
+                                                        className="block px-4 py-2 text-sm hover:bg-neutral-100"
                                                     >
                                                         Owner Dashboard
                                                     </Link>
                                                 )}
                                                 <Link
                                                     href="/profile"
-                                                    className="block px-4 py-2 text-sm text-typography-100 hover:bg-neutral-100"
+                                                    className="block px-4 py-2 text-sm hover:bg-neutral-100"
                                                 >
                                                     Profile
                                                 </Link>

@@ -16,7 +16,7 @@ export default function Contact() {
                     <h1 className="font-display text-display-l md:text-display-xl text-primary mb-4">
                         Get in Touch Today
                     </h1>
-                    <p className="text-lg text-typography-75 max-w-2xl mx-auto">
+                    <p className="text-lg max-w-2xl mx-auto">
                         We'd love to hear from you! Whether you have questions about our products, need assistance, or want to place a custom order.
                     </p>
                 </div>
@@ -31,7 +31,7 @@ export default function Contact() {
                             <h2 className="font-display text-display-s text-primary mb-6">
                                 Contact Us
                             </h2>
-                            <p className="text-typography-300 mb-8">
+                            <p className="mb-8">
                                 We'd love to hear from you! Whether you have questions about our products, need assistance.
                             </p>
 
@@ -41,8 +41,8 @@ export default function Contact() {
                                         <MapPin size={24} className="text-primary" />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-typography-100 mb-1">Address</h3>
-                                        <p className="text-typography-300">
+                                        <h3 className="font-semibold mb-1">Address</h3>
+                                        <p className="">
                                             Gopal Mansion, 28 Nabab Siraj<br />
                                             Ud Daula Rd, Chittagong 4000
                                         </p>
@@ -54,8 +54,8 @@ export default function Contact() {
                                         <Phone size={24} className="text-primary" />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-typography-100 mb-1">Phone Number</h3>
-                                        <a href="tel:01976-088448" className="text-typography-300 hover:text-accent-orange transition-colors">
+                                        <h3 className="font-semibold mb-1">Phone Number</h3>
+                                        <a href="tel:01976-088448" className="hover:text-accent-orange transition-colors">
                                             01976-088448
                                         </a>
                                     </div>
@@ -66,8 +66,8 @@ export default function Contact() {
                                         <Mail size={24} className="text-primary" />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-typography-100 mb-1">Email</h3>
-                                        <a href="mailto:example@gmail.com" className="text-typography-300 hover:text-accent-orange transition-colors">
+                                        <h3 className="font-semibold mb-1">Email</h3>
+                                        <a href="mailto:example@gmail.com" className="hover:text-accent-orange transition-colors">
                                             example@gmail.com
                                         </a>
                                     </div>
@@ -78,8 +78,8 @@ export default function Contact() {
                                         <Clock size={24} className="text-primary" />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-typography-100 mb-1">Opening Time</h3>
-                                        <p className="text-typography-300">
+                                        <h3 className="font-semibold mb-1">Opening Time</h3>
+                                        <p className="">
                                             Everyday Opening Time:<br />
                                             08:00AM-10:00 PM
                                         </p>
@@ -91,7 +91,7 @@ export default function Contact() {
                             <div className="mt-8 bg-neutral-200 rounded-lg h-64 flex items-center justify-center">
                                 <div className="text-center">
                                     <MapPin size={48} className="text-neutral-400 mx-auto mb-2" />
-                                    <p className="text-typography-300">Map integration coming soon</p>
+                                    <p className="">Map integration coming soon</p>
                                 </div>
                             </div>
                         </div>
@@ -125,13 +125,13 @@ export default function Contact() {
                                     placeholder="Phone Number"
                                 />
                                 <div>
-                                    <label className="block text-sm font-medium text-typography-100 mb-1.5">
+                                    <label className="block text-sm font-medium mb-1.5">
                                         Message
                                     </label>
                                     <textarea
                                         rows={5}
                                         placeholder="Message"
-                                        className="block w-full px-4 py-2.5 text-typography-100 bg-white border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                                        className="block w-full px-4 py-2.5 bg-white border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
                                     />
                                 </div>
                                 <Button variant="primary" size="lg" className="w-full">

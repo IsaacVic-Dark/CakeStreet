@@ -34,11 +34,11 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </div>
 
                 <div className="p-4">
-                    <h3 className="text-lg font-semibold text-typography-100 mb-2 line-clamp-1 group-hover:text-accent-orange transition-colors">
+                    <h3 className="text-lg font-semibold mb-2 line-clamp-1 group-hover:text-accent-orange transition-colors">
                         {product.name}
                     </h3>
 
-                    <p className="text-sm text-typography-300 mb-3 line-clamp-2">
+                    <p className="text-sm mb-3 line-clamp-2">
                         {product.description}
                     </p>
 
@@ -53,7 +53,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                                     />
                                 ))}
                             </div>
-                            <span className="text-xs text-typography-300 ml-1">
+                            <span className="text-xs ml-1">
                                 ({Number(rating).toFixed(1)})
                             </span>
                         </div>
@@ -74,7 +74,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
                     <div className="flex items-center justify-between pt-3 border-t border-neutral-200">
                         <div>
-                            <p className="text-xs text-typography-300">From</p>
+                            <p className="text-xs ">From</p>
                             <span className="text-2xl font-bold text-primary">
                                 ৳{Number(product.base_price).toLocaleString()}
                             </span>

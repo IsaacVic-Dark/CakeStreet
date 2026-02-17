@@ -63,7 +63,7 @@ export default function Outlets() {
                     <h2 className="font-display text-display-m text-accent-orange mb-4">
                         Our All Outlets
                     </h2>
-                    <p className="text-lg text-typography-75 max-w-2xl mx-auto">
+                    <p className="text-lg max-w-2xl mx-auto">
                         Stay informed with the latest developments, exclusive deals, and stories that matter. From new product launches and special events
                     </p>
                 </div>
@@ -89,14 +89,14 @@ export default function Outlets() {
                                     />
                                 </div>
                                 <div className="p-6">
-                                    <h3 className="text-xl font-semibold text-typography-100 mb-4">
+                                    <h3 className="text-xl font-semibold mb-4">
                                         {outlet.name}
                                     </h3>
 
                                     <div className="space-y-3">
                                         <div className="flex items-start gap-3">
                                             <MapPin size={20} className="text-accent-orange flex-shrink-0 mt-1" />
-                                            <p className="text-sm text-typography-300">
+                                            <p className="text-sm ">
                                                 {outlet.address}
                                             </p>
                                         </div>
@@ -105,7 +105,7 @@ export default function Outlets() {
                                             <Phone size={20} className="text-accent-orange flex-shrink-0" />
                                             <a
                                                 href={`tel:${outlet.phone}`}
-                                                className="text-sm text-typography-300 hover:text-accent-orange transition-colors"
+                                                className="text-sm hover:text-accent-orange transition-colors"
                                             >
                                                 {outlet.phone}
                                             </a>
@@ -113,8 +113,8 @@ export default function Outlets() {
 
                                         <div className="flex items-start gap-3 pt-3 border-t border-neutral-200">
                                             <Clock size={20} className="text-accent-orange flex-shrink-0 mt-1" />
-                                            <div className="text-sm text-typography-300">
-                                                <p className="font-semibold text-typography-100">Everyday Opening Time:</p>
+                                            <div className="text-sm ">
+                                                <p className="font-semibold">Everyday Opening Time:</p>
                                                 <p>08:00AM-10:00 PM</p>
                                             </div>
                                         </div>
@@ -133,7 +133,7 @@ export default function Outlets() {
                         <h2 className="font-display text-display-m text-primary mb-4">
                             Find Us on Map
                         </h2>
-                        <p className="text-typography-300">
+                        <p className="">
                             Visit any of our convenient locations
                         </p>
                     </div>
@@ -142,7 +142,7 @@ export default function Outlets() {
                     <div className="bg-neutral-200 rounded-lg h-96 flex items-center justify-center">
                         <div className="text-center">
                             <MapPin size={48} className="text-neutral-400 mx-auto mb-4" />
-                            <p className="text-typography-300">
+                            <p className="">
                                 Map integration coming soon
                             </p>
                         </div>

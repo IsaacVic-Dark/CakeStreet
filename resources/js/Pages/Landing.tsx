@@ -66,7 +66,7 @@ export default function Landing({ featuredProducts, categories }: LandingProps) 
                                 Discover Quality Products
                                 <span className="block text-accent-orange">Our All Outlets</span>
                             </h1>
-                            <p className="text-lg text-typography-75 max-w-lg">
+                            <p className="text-lg max-w-lg">
                                 Stay informed with the latest developments, exclusive deals, and stories that matter. From new product launches and special events.
                             </p>
                             <div className="flex flex-wrap gap-4">
@@ -108,7 +108,7 @@ export default function Landing({ featuredProducts, categories }: LandingProps) 
                         <h2 className="font-display text-display-m text-primary mb-4">
                             Featured Products
                         </h2>
-                        <p className="text-typography-300 max-w-2xl mx-auto">
+                        <p className="max-w-2xl mx-auto">
                             Discover our handpicked selection of premium cakes and desserts
                         </p>
                     </div>
@@ -135,7 +135,7 @@ export default function Landing({ featuredProducts, categories }: LandingProps) 
                         <h2 className="font-display text-display-m text-primary mb-4">
                             Browse by Category
                         </h2>
-                        <p className="text-typography-300 max-w-2xl mx-auto">
+                        <p className="max-w-2xl mx-auto">
                             Explore our wide range of delicious categories
                         </p>
                     </div>
@@ -151,7 +151,7 @@ export default function Landing({ featuredProducts, categories }: LandingProps) 
                                         <span className="text-2xl">🎂</span>
                                     </div>
                                 </div>
-                                <h3 className="font-semibold text-typography-100 group-hover:text-accent-orange transition-colors">
+                                <h3 className="font-semibold group-hover:text-accent-orange transition-colors">
                                     {category}
                                 </h3>
                             </Link>
@@ -171,10 +171,10 @@ export default function Landing({ featuredProducts, categories }: LandingProps) 
                                     <div className="w-16 h-16 mx-auto mb-4 bg-primary-400 rounded-full flex items-center justify-center">
                                         <Icon size={32} className="text-primary" />
                                     </div>
-                                    <h3 className="text-xl font-semibold text-typography-100 mb-2">
+                                    <h3 className="text-xl font-semibold mb-2">
                                         {feature.title}
                                     </h3>
-                                    <p className="text-typography-300">
+                                    <p className="">
                                         {feature.description}
                                     </p>
                                 </div>
@@ -191,7 +191,7 @@ export default function Landing({ featuredProducts, categories }: LandingProps) 
                         <h2 className="font-display text-display-m text-primary mb-4">
                             What Our Customers Say
                         </h2>
-                        <p className="text-typography-300 max-w-2xl mx-auto">
+                        <p className="max-w-2xl mx-auto">
                             Don't just take our word for it - hear from our satisfied customers
                         </p>
                     </div>
@@ -203,14 +203,14 @@ export default function Landing({ featuredProducts, categories }: LandingProps) 
                                         <Star key={i} size={16} className="fill-accent-orange text-accent-orange" />
                                     ))}
                                 </div>
-                                <p className="text-typography-100 mb-4">"{testimonial.comment}"</p>
+                                <p className="mb-4">"{testimonial.comment}"</p>
                                 <div className="flex items-center gap-3">
                                     <div className="w-12 h-12 bg-primary-400 rounded-full flex items-center justify-center text-white font-semibold">
                                         {testimonial.name.charAt(0)}
                                     </div>
                                     <div>
-                                        <p className="font-semibold text-typography-100">{testimonial.name}</p>
-                                        <p className="text-sm text-typography-300">Verified Customer</p>
+                                        <p className="font-semibold">{testimonial.name}</p>
+                                        <p className="text-sm ">Verified Customer</p>
                                     </div>
                                 </div>
                             </div>

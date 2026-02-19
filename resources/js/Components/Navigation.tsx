@@ -10,7 +10,8 @@ interface NavigationProps {
 export default function Navigation({ user }: NavigationProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
-    const { url } = usePage();
+    const { url, props } = usePage<{ cartCount: number }>();
+    const cartCount = (props as any).cartCount ?? 0;
 
     const navigation = [
         { name: 'Home', href: '/' },
@@ -90,7 +91,7 @@ export default function Navigation({ user }: NavigationProps) {
                                     <ShoppingCart size={24} />
                                     {/* Cart badge - you can add dynamic count here */}
                                     <span className="absolute -top-1 -right-1 bg-accent-orange text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold">
-                                        0
+                                        {cartCount} 
                                     </span>
                                 </Link>
 

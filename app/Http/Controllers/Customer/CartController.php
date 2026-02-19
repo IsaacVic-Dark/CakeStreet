@@ -26,6 +26,7 @@ class CartController extends Controller
         return Inertia::render('Cart/Index', [
             'cartItems' => $cartItems,
             'subtotal' => (float) $subtotal,
+            'cartCount' => $cartItems->count(),
         ]);
     }
 

@@ -31,13 +31,13 @@ export default function Index({ products, filters, categories }: Props) {
     const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
 
     const priceRanges = [
-        { id: '0-100', label: '৳0 - ৳100', min: 0, max: 100 },
-        { id: '101-200', label: '৳101 - ৳200', min: 101, max: 200 },
-        { id: '201-300', label: '৳201 - ৳300', min: 201, max: 300 },
-        { id: '301-400', label: '৳301 - ৳400', min: 301, max: 400 },
-        { id: '301-400-alt', label: '৳301 - ৳400', min: 301, max: 400 },
-        { id: '401-500', label: '৳401 - ৳500', min: 401, max: 500 },
-        { id: '501-600', label: '৳501 - ৳600', min: 501, max: 600 },
+        { id: '0-100', label: 'Kes0 - Kes100', min: 0, max: 100 },
+        { id: '101-200', label: 'Kes101 - Kes200', min: 101, max: 200 },
+        { id: '201-300', label: 'Kes201 - Kes300', min: 201, max: 300 },
+        { id: '301-400', label: 'Kes301 - Kes400', min: 301, max: 400 },
+        { id: '301-400-alt', label: 'Kes301 - Kes400', min: 301, max: 400 },
+        { id: '401-500', label: 'Kes401 - Kes500', min: 401, max: 500 },
+        { id: '501-600', label: 'Kes501 - Kes600', min: 501, max: 600 },
     ];
 
     const toggleCategory = (category: string) => {

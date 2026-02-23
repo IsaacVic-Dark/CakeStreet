@@ -76,7 +76,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                         <div>
                             <p className="text-xs ">From</p>
                             <span className="text-2xl font-bold text-primary">
-                                ৳{Number(product.base_price).toLocaleString()}
+                                Kes{Number(product.base_price).toLocaleString()}
                             </span>
                         </div>
 

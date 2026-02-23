@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Customer\CartController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Customer\CatalogController;
 use App\Http\Controllers\Customer\CakeDesignerController;
 use App\Http\Controllers\Customer\CheckoutController;
@@ -64,6 +65,10 @@ Route::middleware(['auth'])->group(function () {
     // Customer Orders
     Route::get('/my-orders', [CustomerOrderController::class, 'index'])->name('customer.orders.index');
     Route::get('/my-orders/{order}', [CustomerOrderController::class, 'show'])->name('customer.orders.show');
+
+    Route::post('/checkout', [PaymentController::class, 'processCheckout'])->name('checkout.process');
+    Route::get('/payment/{payment}/status', [PaymentController::class, 'checkPaymentStatus'])->name('payment.status');
+    Route::post('/payment/{payment}/retry', [PaymentController::class, 'retryPayment'])->name('payment.retry');
 });
 
 // Owner/Admin routes

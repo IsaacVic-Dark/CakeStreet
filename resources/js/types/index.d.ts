@@ -96,6 +96,17 @@ export interface CartItem {
     quantity: number;
 }
 
+
+// export interface OrderItem {
+//     id: string;
+//     order_id: string;
+//     product_id: string | null;
+//     product_name: string;
+//     quantity: number;
+//     unit_price: number;
+//     total_price: number;
+// }
+
 export interface OrderItem {
     id: string;
     product_name: string;
@@ -128,6 +139,52 @@ export interface Order {
     created_at: string;
     bakery?: Bakery;
 }
+
+// resources/js/types/index.d.ts (add these types)
+
+export interface Payment {
+    id: string;
+    order_id: string;
+    user_id: number;
+    gateway: 'mpesa' | 'stripe' | 'paypal' | 'airtel_money' | 'cash';
+    transaction_id: string | null;
+    mpesa_receipt_number: string | null;
+    amount: number;
+    status: 'pending' | 'processing' | 'completed' | 'failed' | 'refunded';
+    phone_number: string | null;
+    mpesa_checkout_request_id: string | null;
+    attempt_count: number;
+    paid_at: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
+// export interface Order {
+//     id: string;
+//     order_number: string;
+//     bakery_id: string;
+//     customer_id: number;
+//     order_type: 'catalog' | 'custom' | 'bulk';
+//     delivery_type: 'delivery' | 'pickup';
+//     delivery_address: string | null;
+//     delivery_city: string | null;
+//     delivery_date: string | null;
+//     delivery_time_slot: string | null;
+//     delivery_fee: number;
+//     subtotal: number;
+//     tax: number;
+//     discount: number;
+//     total: number;
+//     status: 'pending' | 'confirmed' | 'preparing' | 'ready' | 'out_for_delivery' | 'delivered' | 'cancelled';
+//     payment_status: 'pending' | 'paid' | 'failed' | 'refunded';
+//     payment_method: string | null;
+//     payment_reference: string | null;
+//     payment_metadata: any | null;
+//     items?: OrderItem[];
+//     payments?: Payment[];
+//     created_at: string;
+// }
+
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {

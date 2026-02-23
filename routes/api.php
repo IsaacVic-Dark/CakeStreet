@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
+Route::post('/mpesa/callback', [PaymentController::class, 'mpesaCallback']);
+Route::post('/mpesa/timeout', [PaymentController::class, 'mpesaTimeout']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (\Illuminate\Http\Request $request) {
         return $request->user();

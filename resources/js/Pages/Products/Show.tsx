@@ -304,7 +304,7 @@ export default function Show({ product, relatedProducts }: Props) {
                                     </h3>
                                     <div className="flex items-center gap-2 mb-3">
                                         <span className="text-lg font-bold">
-                                            ৳{item.price}kg
+                                            Kes{item.price}kg
                                         </span>
                                         {item.originalPrice && (
                                             <>
@@ -312,7 +312,7 @@ export default function Show({ product, relatedProducts }: Props) {
                                                     Save
                                                 </span>
                                                 <span className="text-sm line-through">
-                                                    ৳{item.originalPrice}kg
+                                                    Kes{item.originalPrice}kg
                                                 </span>
                                             </>
                                         )}

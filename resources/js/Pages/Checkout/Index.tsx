@@ -1,20 +1,33 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { CartItem } from '@/types';
+import PaymentModal from '@/Components/PaymentModal';
+import { useState } from 'react';
+import { router } from '@inertiajs/react';
 
 interface Props {
     cartItems: CartItem[];
     subtotal: number;
 }
 
+interface PaymentResponse {
+    order: any;
+    payment: any;
+    checkout_request_id: string;
+}
+
 export default function Checkout({ cartItems, subtotal }: Props) {
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [paymentData, setPaymentData] = useState<PaymentResponse | null>(null);
+
     const { data, setData, post, processing, errors } = useForm({
         delivery_type: 'delivery' as 'delivery' | 'pickup',
         delivery_address: '',
         delivery_city: '',
         delivery_date: '',
         delivery_time_slot: '10:00 - 12:00',
-        payment_method: 'cash' as 'mpesa' | 'stripe' | 'cash',
+        payment_method: 'cash' as 'mpesa' | 'stripe' | 'paypal' | 'airtel_money' | 'cash',
+        phone_number: '',
         special_instructions: '',
     });
 
@@ -24,12 +37,80 @@ export default function Checkout({ cartItems, subtotal }: Props) {
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        post('/checkout');
+        
+        // Validate phone number for M-Pesa
+        if (data.payment_method === 'mpesa' && data.delivery_type === 'delivery') {
+            if (!data.phone_number) {
+                alert('Please enter your M-Pesa phone number');
+                return;
+            }
+            // Basic phone validation
+            const phone = data.phone_number.replace(/\D/g, '');
+            if (!phone.match(/^(0|254)?[17]\d{8}$/)) {
+                alert('Please enter a valid Kenyan phone number');
+                return;
+            }
+        }
+
+        post('/checkout', {
+            onSuccess: (page: any) => {
+                // Check if we need to show payment modal (for M-Pesa)
+                if (data.payment_method === 'mpesa' && data.delivery_type === 'delivery') {
+                    const response = page.props as any;
+                    if (response.order && response.payment) {
+                        setPaymentData({
+                            order: response.order,
+                            payment: response.payment,
+                            checkout_request_id: response.checkout_request_id
+                        });
+                        setShowPaymentModal(true);
+                    }
+                } else {
+                    // For other payment methods, redirect to order page
+                    router.visit(`/orders/${page.props.order?.order_number}`);
+                }
+            },
+            onError: (errors) => {
+                console.error('Checkout errors:', errors);
+            }
+        });
+    };
+
+    const handlePaymentRetry = (phoneNumber: string) => {
+        if (paymentData) {
+            router.post(`/payment/${paymentData.payment.id}/retry`, {
+                phone_number: phoneNumber
+            }, {
+                onSuccess: (page: any) => {
+                    setPaymentData({
+                        order: page.props.order,
+                        payment: page.props.payment,
+                        checkout_request_id: page.props.checkout_request_id
+                    });
+                }
+            });
+        }
     };
 
     return (
         <AuthenticatedLayout>
             <Head title="Checkout" />
+            
+            {/* Payment Modal */}
+            {paymentData && (
+                <PaymentModal
+                    order={paymentData.order}
+                    payment={paymentData.payment}
+                    checkout_request_id={paymentData.checkout_request_id}
+                    isOpen={showPaymentModal}
+                    onClose={() => setShowPaymentModal(false)}
+                    onSuccess={() => {
+                        setShowPaymentModal(false);
+                    }}
+                    onRetry={handlePaymentRetry}
+                />
+            )}
+
             <div className="max-w-6xl mx-auto px-4 py-8">
                 {/* Breadcrumb */}
                 <div className="mb-6 text-sm text-gray-600">
@@ -57,7 +138,6 @@ export default function Checkout({ cartItems, subtotal }: Props) {
                                     <input
                                         type="text"
                                         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50"
-                                        style={{ focusRingColor: '#5c2e2e' }}
                                         required
                                     />
                                 </div>
@@ -71,7 +151,6 @@ export default function Checkout({ cartItems, subtotal }: Props) {
                                         value={data.delivery_address}
                                         onChange={(e) => setData('delivery_address', e.target.value)}
                                         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50"
-                                        style={{ focusRingColor: '#5c2e2e' }}
                                         required={data.delivery_type === 'delivery'}
                                     />
                                     {errors.delivery_address && (
@@ -86,7 +165,6 @@ export default function Checkout({ cartItems, subtotal }: Props) {
                                     <input
                                         type="text"
                                         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50"
-                                        style={{ focusRingColor: '#5c2e2e' }}
                                     />
                                 </div>
 
@@ -99,21 +177,31 @@ export default function Checkout({ cartItems, subtotal }: Props) {
                                         value={data.delivery_city}
                                         onChange={(e) => setData('delivery_city', e.target.value)}
                                         className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50"
-                                        style={{ focusRingColor: '#5c2e2e' }}
                                     />
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm font-semibold mb-2" style={{ color: '#4a1f1f' }}>
-                                        Phone Number*
-                                    </label>
-                                    <input
-                                        type="tel"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50"
-                                        style={{ focusRingColor: '#5c2e2e' }}
-                                        required
-                                    />
-                                </div>
+                                {/* Phone Number Field - Show for M-Pesa */}
+                                {data.payment_method === 'mpesa' && (
+                                    <div>
+                                        <label className="block text-sm font-semibold mb-2" style={{ color: '#4a1f1f' }}>
+                                            M-Pesa Phone Number*
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            value={data.phone_number}
+                                            onChange={(e) => setData('phone_number', e.target.value)}
+                                            placeholder="0712345678"
+                                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50"
+                                            required={data.payment_method === 'mpesa' && data.delivery_type === 'delivery'}
+                                        />
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            Enter the M-Pesa registered phone number
+                                        </p>
+                                        {errors.phone_number && (
+                                            <p className="text-red-600 text-sm mt-1">{errors.phone_number}</p>
+                                        )}
+                                    </div>
+                                )}
 
                                 <div className="flex items-center gap-2">
                                     <input
@@ -128,7 +216,7 @@ export default function Checkout({ cartItems, subtotal }: Props) {
                                 </div>
                             </div>
 
-                            {/* Delivery Options */}
+                            {/* Delivery Options - same as before */}
                             <div className="bg-white rounded-lg shadow p-6">
                                 <h2 className="text-lg font-semibold mb-4" style={{ color: '#4a1f1f' }}>
                                     Delivery Options
@@ -170,7 +258,6 @@ export default function Checkout({ cartItems, subtotal }: Props) {
                                             value={data.delivery_date}
                                             onChange={(e) => setData('delivery_date', e.target.value)}
                                             className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50"
-                                            style={{ focusRingColor: '#5c2e2e' }}
                                             required
                                         />
                                         {errors.delivery_date && (
@@ -185,7 +272,6 @@ export default function Checkout({ cartItems, subtotal }: Props) {
                                             value={data.delivery_time_slot}
                                             onChange={(e) => setData('delivery_time_slot', e.target.value)}
                                             className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50"
-                                            style={{ focusRingColor: '#5c2e2e' }}
                                         >
                                             <option value="10:00 - 12:00">10:00 - 12:00</option>
                                             <option value="12:00 - 14:00">12:00 - 14:00</option>
@@ -205,7 +291,6 @@ export default function Checkout({ cartItems, subtotal }: Props) {
                                     value={data.special_instructions}
                                     onChange={(e) => setData('special_instructions', e.target.value)}
                                     className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50"
-                                    style={{ focusRingColor: '#5c2e2e' }}
                                     rows={3}
                                     placeholder="Any special requests for your order?"
                                 />
@@ -271,7 +356,6 @@ export default function Checkout({ cartItems, subtotal }: Props) {
                                             type="text"
                                             placeholder="Enter code"
                                             className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-opacity-50"
-                                            style={{ focusRingColor: '#5c2e2e' }}
                                         />
                                         <button
                                             type="button"
@@ -305,7 +389,7 @@ export default function Checkout({ cartItems, subtotal }: Props) {
                                                 className="w-4 h-4"
                                                 style={{ accentColor: '#5c2e2e' }}
                                             />
-                                            <span className="text-sm font-medium">Cash on delivery</span>
+                                            <span className="text-sm font-medium">Cash on delivery/pickup</span>
                                         </label>
                                         <label className="flex items-center gap-2 cursor-pointer">
                                             <input
@@ -331,15 +415,60 @@ export default function Checkout({ cartItems, subtotal }: Props) {
                                             />
                                             <span className="text-sm font-medium">Card (Stripe)</span>
                                         </label>
+                                        <label className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="payment_method"
+                                                value="paypal"
+                                                checked={data.payment_method === 'paypal'}
+                                                onChange={() => setData('payment_method', 'paypal')}
+                                                className="w-4 h-4"
+                                                style={{ accentColor: '#5c2e2e' }}
+                                            />
+                                            <span className="text-sm font-medium">PayPal</span>
+                                        </label>
+                                        <label className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="payment_method"
+                                                value="airtel_money"
+                                                checked={data.payment_method === 'airtel_money'}
+                                                onChange={() => setData('payment_method', 'airtel_money')}
+                                                className="w-4 h-4"
+                                                style={{ accentColor: '#5c2e2e' }}
+                                            />
+                                            <span className="text-sm font-medium">Airtel Money</span>
+                                        </label>
                                     </div>
                                     {data.payment_method !== 'cash' && (
                                         <div className="mt-3 flex gap-2">
-                                            <img src="/images/payment-icons/visa.png" alt="Visa" className="h-6" />
-                                            <img src="/images/payment-icons/mastercard.png" alt="Mastercard" className="h-6" />
-                                            <img src="/images/payment-icons/mpesa.png" alt="M-Pesa" className="h-6" />
+                                            {data.payment_method === 'stripe' && (
+                                                <>
+                                                    <img src="/images/payment-icons/visa.png" alt="Visa" className="h-6" />
+                                                    <img src="/images/payment-icons/mastercard.png" alt="Mastercard" className="h-6" />
+                                                </>
+                                            )}
+                                            {data.payment_method === 'mpesa' && (
+                                                <img src="/images/payment-icons/mpesa.png" alt="M-Pesa" className="h-6" />
+                                            )}
+                                            {data.payment_method === 'paypal' && (
+                                                <img src="/images/payment-icons/paypal.png" alt="PayPal" className="h-6" />
+                                            )}
+                                            {data.payment_method === 'airtel_money' && (
+                                                <img src="/images/payment-icons/airtel.png" alt="Airtel Money" className="h-6" />
+                                            )}
                                         </div>
                                     )}
                                 </div>
+
+                                {/* Important Notice for M-Pesa Pickup */}
+                                {data.payment_method === 'mpesa' && data.delivery_type === 'pickup' && (
+                                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                                        <p className="text-sm text-yellow-700">
+                                            For pickup orders, you'll pay at the bakery. No M-Pesa STK push will be sent.
+                                        </p>
+                                    </div>
+                                )}
 
                                 {/* Place Order Button */}
                                 <button
